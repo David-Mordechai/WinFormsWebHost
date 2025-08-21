@@ -35,7 +35,6 @@ public partial class MainForm : Form
         {
             _logger.LogError(ex, "Failed to load WebView2");
             Close();
-            // ignore
         }
     }
 

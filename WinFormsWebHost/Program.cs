@@ -54,16 +54,11 @@ internal class Program
                 using var reader = new StreamReader(stream);
                 var html = await reader.ReadToEndAsync();
 
-                // Determine current theme
                 var themeClass = ThemeHelper.IsDarkMode() ? "dark" : "light";
 
-                // Inject class directly into <body>
                 html = html.Replace("<body>", $"<body class=\"{themeClass}\">");
 
                 await context.Response.WriteAsync(html);
-
-                //context.Response.ContentType = "text/html; charset=utf-8";
-                //await context.Response.SendFileAsync(index);
             }
         });
 
