@@ -1,0 +1,135 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>WinForms + SignalR</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.0/signalr.min.js"></script>
+</head>
+<body>
+    <h1>WinForms hosted Web Page</h1>
+    <p>
+        <button onclick="callApi()">Call API</button>
+    </p>
+    <p>
+        <input id="user" placeholder="Name" /> <input id="msg" placeholder="Message" />
+        <button onclick="sendMessage()">Send</button>
+    </p>
+    <ul id="messages"></ul>
+
+    <script>
+        async function callApi() {
+            const response = await fetch("api/hello");
+            alert(await response.text());
+        }
+
+        // SignalR connection
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/chat")
+            .build();
+
+        connection.on("ReceiveMessage", (user, message) => {
+            const li = document.createElement("li");
+            li.textContent = `${user}: ${message}`;
+            document.getElementById("messages").appendChild(li);
+        });
+
+        connection.on("ReceiveTheme", theme => {
+            applyTheme(theme);
+            
+        });
+
+        function applyTheme(theme) {
+            if (theme === "Dark") {
+                document.body.classList.add("dark");
+                document.body.classList.remove("light");
+            } else {
+                document.body.classList.add("light");
+                document.body.classList.remove("dark");
+            }
+        }
+
+        async function start() {
+            try {
+                await connection.start();
+               
+                console.log("Connected to SignalR");
+            } catch (err) {
+                console.error(err);
+                setTimeout(start, 2000);
+            }
+        }
+
+        async function sendMessage() {
+            const user = document.getElementById("user").value;
+            const msg = document.getElementById("msg").value;
+            await connection.invoke("SendMessage", user, msg);
+        }
+
+        start();
+    </script>
+    <style>
+        body {
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Light theme */
+        body.light {
+            background-color: #ffffff;
+            color: #000000;
+            font-family: Segoe UI, sans-serif;
+        }
+
+        body.light button {
+            background-color: #f0f0f0;
+            color: #000;
+            border: 1px solid #ccc;
+        }
+
+        body.light input {
+            background-color: #fff;
+            color: #000;
+            border: 1px solid #ccc;
+        }
+
+        /* Dark theme */
+        body.dark {
+            background-color: #1e1e1e;
+            color: #f0f0f0;
+            font-family: Segoe UI, sans-serif;
+        }
+
+        body.dark button {
+            background-color: #333;
+            color: #f0f0f0;
+            border: 1px solid #555;
+        }
+
+        body.dark input {
+            background-color: #2a2a2a;
+            color: #f0f0f0;
+            border: 1px solid #555;
+        }
+
+        /* Optional: messages list styling */
+        #messages {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        #messages li {
+            margin-bottom: 5px;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        body.light #messages li {
+            background-color: #f5f5f5;
+            color: #000;
+        }
+
+        body.dark #messages li {
+            background-color: #2a2a2a;
+            color: #f0f0f0;
+        }
+    </style>
+</body>
+</html>

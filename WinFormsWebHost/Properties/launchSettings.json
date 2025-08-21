@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "WinFormsWebHost": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:53522;http://localhost:53523"
+    }
+  }
+}
