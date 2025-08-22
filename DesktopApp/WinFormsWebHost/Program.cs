@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using System.IO;
 using System.Reflection;
+using Microsoft.Extensions.Hosting;
 
 namespace WinFormsWebHost;
 
@@ -23,6 +24,10 @@ internal class Program
         builder.Services.AddSignalR();
         builder.Services.AddSingleton<MainForm>();
 
+        builder.Services.AddCors();
+        
+        builder.Services.AddSingleton<Settings>();
+        
         var app = builder.Build();
 
         var uiAssembly = Assembly.GetCallingAssembly();
@@ -33,6 +38,8 @@ internal class Program
             ContentTypeProvider = new FileExtensionContentTypeProvider()
         });
 
+        app.UseCors(policyBuilder => policyBuilder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+        
         app.MapControllers();
 
         app.MapGet("api/hello", () => "Hello from WinForms!");
@@ -41,7 +48,7 @@ internal class Program
         {
             var path = context.Request.Path;
 
-            if (path.StartsWithSegments("/chat") || path.StartsWithSegments("/api"))
+            if (path.StartsWithSegments("/ws") || path.StartsWithSegments("/api"))
             {
                 await next();
                 return;
@@ -62,9 +69,13 @@ internal class Program
             }
         });
 
-        app.MapHub<ChatHub>("/chat");
-       
-        _ = app.RunAsync("http://localhost:5000");
+        app.MapHub<AppHub>("/ws");
+        
+        var settings = app.Services.GetRequiredService<Settings>();
+        if (app.Environment.IsDevelopment())
+            settings.FrontedPort = 5173;
+        
+        _ = app.RunAsync($"http://localhost:{settings.BackendPort}");
 
         ApplicationConfiguration.Initialize();
         var mainForm = app.Services.GetRequiredService<MainForm>();

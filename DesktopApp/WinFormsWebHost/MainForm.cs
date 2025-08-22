@@ -7,17 +7,19 @@ namespace WinFormsWebHost;
 public partial class MainForm : Form
 {
     private readonly ILogger<MainForm> _logger;
-    private readonly IHubContext<ChatHub> _hubContext;
+    private readonly IHubContext<AppHub> _hubContext;
+    private readonly Settings _settings;
 
     private readonly WebView2 _webView = new()
     {
         Dock = DockStyle.Fill
     };
 
-    public MainForm(ILogger<MainForm> logger, IHubContext<ChatHub> hubContext)
+    public MainForm(ILogger<MainForm> logger, IHubContext<AppHub> hubContext, Settings settings)
     {
         _logger = logger;
         _hubContext = hubContext;
+        _settings = settings;
         InitializeComponent();
         Load += MainForm_Load;
     }
@@ -29,7 +31,7 @@ public partial class MainForm : Form
             Controls.Add(_webView);
 
             await _webView.EnsureCoreWebView2Async();
-            _webView.CoreWebView2.Navigate("http://localhost:5000");
+            _webView.CoreWebView2.Navigate($"http://localhost:{_settings.FrontedPort}");
         }
         catch (Exception ex)
         {
