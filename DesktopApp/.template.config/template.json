@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "David Mordechai",
+  "classifications": [ "WinForms", "Desktop" ],
+  "identity": "DavidMordechai.WinFormsWebHost",
+  "name": "WinForms WebHost Template",
+  "shortName": "winformswebhost",
+  "sourceName": "WinFormsWebHost",
+  "preferNameDirectory": true,
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  }
+}
