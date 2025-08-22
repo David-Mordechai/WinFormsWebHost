@@ -5,7 +5,7 @@ import vue from '@vitejs/plugin-vue'
 export default defineConfig({
   plugins: [vue()],
   build: {
-    outDir: '../DesktopApp/AppUi',
+    outDir: '../DesktopApp/WinFormsWebHost/AppUi',
     emptyOutDir: true,
     rollupOptions: {
       onwarn(warning, warn) {
