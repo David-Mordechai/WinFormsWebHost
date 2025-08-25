@@ -1,13 +1,13 @@
 {
   "profiles": {
-    "WinFormsWebHost": {
+    "WinFormsVue": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "WinFormsWebHost.VueDebug": {
+    "WinFormsVue.VueDebug": {
       "commandName": "Project",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",

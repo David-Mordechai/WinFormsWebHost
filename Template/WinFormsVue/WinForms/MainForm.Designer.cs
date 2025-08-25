@@ -1,4 +1,4 @@
-﻿namespace WinFormsWebHost.WinForms
+﻿namespace WinFormsVue.WinForms
 {
     partial class MainForm
     {

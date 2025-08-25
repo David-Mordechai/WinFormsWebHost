@@ -6,9 +6,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using System.IO;
 using System.Reflection;
-using WinFormsWebHost.WinForms;
+using WinFormsVue.WinForms;
 
-namespace WinFormsWebHost;
+namespace WinFormsVue;
 
 internal class Program
 {

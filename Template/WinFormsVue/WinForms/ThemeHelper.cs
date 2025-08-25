@@ -1,7 +1,7 @@
 using Microsoft.Win32;
 using System.Runtime.InteropServices;
 
-namespace WinFormsWebHost.WinForms;
+namespace WinFormsVue.WinForms;
 
 public enum AppTheme
 {

@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using Microsoft.Web.WebView2.WinForms;
 
-namespace WinFormsWebHost.WinForms;
+namespace WinFormsVue.WinForms;
 
 public partial class MainForm : Form
 {

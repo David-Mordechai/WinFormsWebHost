@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 
-namespace WinFormsWebHost.WinForms;
+namespace WinFormsVue.WinForms;
 
 public class AppHub(ILogger<AppHub> logger, ThemeHelper themeHelper) : Hub
 {

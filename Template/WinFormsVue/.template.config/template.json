@@ -5,7 +5,7 @@
   "identity": "winformsvue",
   "name": "WinForms WebHost Template",
   "shortName": "winformsvue",
-  "sourceName": "WinFormsWebHost",
+  "sourceName": "WinFormsVue",
   "preferNameDirectory": true,
   "tags": {
     "language": "C#",

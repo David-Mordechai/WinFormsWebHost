@@ -1,6 +1,6 @@
-﻿using WinFormsWebHost.WinForms;
+﻿using WinFormsVue.WinForms;
 
-namespace WinFormsWebHost;
+namespace WinFormsVue;
 
 public class Settings
 {
