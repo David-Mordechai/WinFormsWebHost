@@ -1,0 +1,18 @@
+{
+  "profiles": {
+    "WinFormsWebHost": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    "WinFormsWebHost.VueDebug": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "VUE_DEBUG_PORT": "5173"
+      }
+    }
+  }
+}

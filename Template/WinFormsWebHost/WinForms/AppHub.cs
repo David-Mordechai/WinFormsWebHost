@@ -1,13 +1,13 @@
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 
-namespace WinFormsWebHost;
+namespace WinFormsWebHost.WinForms;
 
-public class AppHub(ILogger<AppHub> logger) : Hub
+public class AppHub(ILogger<AppHub> logger, ThemeHelper themeHelper) : Hub
 {
     public override async Task OnConnectedAsync()
     {
-        var dark = ThemeHelper.IsDarkMode();
+        var dark = themeHelper.IsDarkMode();
         await Clients.All.SendAsync("ReceiveTheme", dark ?
             nameof(AppTheme.Dark) : nameof(AppTheme.Light));
     }

@@ -1,11 +1,11 @@
 {
   "$schema": "http://json.schemastore.org/template",
   "author": "David Mordechai",
-  "classifications": [ "WinForms", "Desktop" ],
-  "identity": "DavidMordechai.WinFormsWebHost",
+  "classifications": [ "WinForms", "Desktop", "Vue" ],
+  "identity": "winformsvue",
   "name": "WinForms WebHost Template",
-  "shortName": "winformswebhost",
-  "sourceName": "WinFormsWebHost",
+  "shortName": "winformsvue",
+  "sourceName": "winformsvue",
   "preferNameDirectory": true,
   "tags": {
     "language": "C#",

@@ -2,24 +2,26 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using Microsoft.Web.WebView2.WinForms;
 
-namespace WinFormsWebHost;
+namespace WinFormsWebHost.WinForms;
 
 public partial class MainForm : Form
 {
     private readonly ILogger<MainForm> _logger;
     private readonly IHubContext<AppHub> _hubContext;
     private readonly Settings _settings;
+    private readonly ThemeHelper _themeHelper;
 
     private readonly WebView2 _webView = new()
     {
         Dock = DockStyle.Fill
     };
 
-    public MainForm(ILogger<MainForm> logger, IHubContext<AppHub> hubContext, Settings settings)
+    public MainForm(ILogger<MainForm> logger, IHubContext<AppHub> hubContext, Settings settings, ThemeHelper themeHelper)
     {
         _logger = logger;
         _hubContext = hubContext;
         _settings = settings;
+        _themeHelper = themeHelper;
         InitializeComponent();
         Load += MainForm_Load;
     }
@@ -61,7 +63,7 @@ public partial class MainForm : Form
 
     private void SetTheme()
     {
-        var dark = ThemeHelper.IsDarkMode();
+        var dark = _themeHelper.IsDarkMode();
         ThemeHelper.UseImmersiveDarkMode(Handle, dark);
         BackColor = dark ? Color.FromArgb(30, 30, 30) : SystemColors.Control;
         ForeColor = dark ? Color.White : SystemColors.ControlText;

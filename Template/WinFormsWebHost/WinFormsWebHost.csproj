@@ -20,9 +20,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<EmbeddedResource Include="AppUi\**\*" />
+		<EmbeddedResource Include="WinForms\WebUi\**\*" />
 	</ItemGroup>
-
+	
 	<ItemGroup>
 	  <None Update="appsettings.json">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>

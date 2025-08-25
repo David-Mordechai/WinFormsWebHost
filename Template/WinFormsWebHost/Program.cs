@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using System.IO;
 using System.Reflection;
-using Microsoft.Extensions.Hosting;
+using WinFormsWebHost.WinForms;
 
 namespace WinFormsWebHost;
 
@@ -17,21 +17,23 @@ internal class Program
     {
         var builder = WebApplication.CreateBuilder();
 
-        builder.Configuration.AddJsonFile("appsettings.json", 
+        builder.Configuration.AddJsonFile("appsettings.json",
             optional: false, reloadOnChange: true);
-        
+
         builder.Services.AddControllers();
         builder.Services.AddSignalR();
         builder.Services.AddSingleton<MainForm>();
 
         builder.Services.AddCors();
-        
-        builder.Services.AddSingleton<Settings>();
-        
+
+        builder.Services.AddSingleton<ThemeHelper>();
+        var configSettings = builder.Configuration.GetRequiredSection(nameof(Settings)).Get<Settings>()!;
+        builder.Services.AddSingleton(configSettings);
+
         var app = builder.Build();
 
-        var uiAssembly = Assembly.GetCallingAssembly();
-        var uiProvider = new ManifestEmbeddedFileProvider(uiAssembly, "AppUi");
+        var uiAssembly = Assembly.GetExecutingAssembly();
+        var uiProvider = new ManifestEmbeddedFileProvider(uiAssembly, Path.Combine("WinForms", "WebUi"));
         app.UseStaticFiles(new StaticFileOptions
         {
             FileProvider = uiProvider,
@@ -39,7 +41,7 @@ internal class Program
         });
 
         app.UseCors(policyBuilder => policyBuilder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
-        
+
         app.MapControllers();
 
         app.MapGet("api/hello", () => "Hello from WinForms!");
@@ -57,27 +59,22 @@ internal class Program
             var index = uiProvider.GetFileInfo("index.html");
             if (index.Exists)
             {
-                await using var stream = index.CreateReadStream();
-                using var reader = new StreamReader(stream);
-                var html = await reader.ReadToEndAsync();
-
-                var themeClass = ThemeHelper.IsDarkMode() ? "dark" : "light";
-
-                html = html.Replace("<body>", $"<body class=\"{themeClass}\">");
-
-                await context.Response.WriteAsync(html);
+                context.Response.ContentType = "text/html; charset=utf-8";
+                await context.Response.SendFileAsync(index);
             }
         });
 
         app.MapHub<AppHub>("/ws");
-        
+
         var settings = app.Services.GetRequiredService<Settings>();
-        if (app.Environment.IsDevelopment())
-            settings.FrontedPort = 5173;
-        
+
+        var vueDebugPort = Environment.GetEnvironmentVariable("VUE_DEBUG_PORT");
+        if (vueDebugPort is not null)
+            settings.FrontedPort = int.Parse(vueDebugPort);
+
         _ = app.RunAsync($"http://localhost:{settings.BackendPort}");
 
-        ApplicationConfiguration.Initialize();
+        //ApplicationConfiguration.Initialize();
         var mainForm = app.Services.GetRequiredService<MainForm>();
         Application.Run(mainForm);
     }

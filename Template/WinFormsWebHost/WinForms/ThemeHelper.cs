@@ -1,18 +1,23 @@
 using Microsoft.Win32;
 using System.Runtime.InteropServices;
 
-namespace WinFormsWebHost;
+namespace WinFormsWebHost.WinForms;
 
 public enum AppTheme
 {
     Light,
-    Dark
+    Dark,
+    System
 }
 
-public static class ThemeHelper
+public class ThemeHelper(Settings settings)
 {
-    public static bool IsDarkMode()
+
+    public bool IsDarkMode()
     {
+        if (settings.ThemeMode is not AppTheme.System)
+            return settings.ThemeMode == AppTheme.Dark;
+
         try
         {
             using var key = Registry.CurrentUser.OpenSubKey(
@@ -32,14 +37,14 @@ public static class ThemeHelper
 
     [DllImport("dwmapi.dll")]
     private static extern int DwmSetWindowAttribute(
-        IntPtr hwnd,
+        nint hwnd,
         int attr,
         ref int attrValue,
         int attrSize);
 
     private const int DwmWaUseImmersiveDarkMode = 20; // For Win10 1809 and later
 
-    public static void UseImmersiveDarkMode(IntPtr handle, bool enabled)
+    public static void UseImmersiveDarkMode(nint handle, bool enabled)
     {
         if (!IsWindows10OrGreater(17763)) return; // build 17763 = Win10 1809
         var useImmersiveDarkMode = enabled ? 1 : 0;
@@ -52,6 +57,6 @@ public static class ThemeHelper
     private static bool IsWindows10OrGreater(int build = -1)
     {
         var v = Environment.OSVersion.Version;
-        return (v.Major >= 10 && v.Build >= build);
+        return v.Major >= 10 && v.Build >= build;
     }
 }
